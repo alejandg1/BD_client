@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
+  "github.com/alejandg1/BDclient/pkg/cobraUtils"
 )
 
 func main() {
-  fmt.Println("BD client")
+  cobrautils.Execute()
 }
