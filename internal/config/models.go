@@ -10,7 +10,7 @@ type Connection struct {
 	Port int
 	User string
 	Pass string
-  Database string
+  Engine string
 }
 
 type History struct {

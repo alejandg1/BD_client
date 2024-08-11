@@ -1,3 +1,3 @@
 #!/bin/bash
 
-go run  ./cmd/client/
+go run ./main.go

@@ -2,10 +2,10 @@ package tui
 
 import (
 	"fmt"
-
+	"github.com/alejandg1/BDclient/internal/config"
 	"github.com/alejandg1/BDclient/internal/theme"
-	"github.com/alejandg1/BDclient/pkg/config"
 	tea "github.com/charmbracelet/bubbletea"
+	"os"
 )
 
 type Connections struct {
@@ -44,6 +44,12 @@ func (m Connections) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "enter":
 			m.Selected = m.Cursor
+		case "e":
+			fmt.Println("Edit connection")
+		case "d":
+			fmt.Println("Delete connection")
+		case "r":
+			fmt.Println("return to main menu")
 		}
 	}
 
@@ -53,15 +59,33 @@ func (m Connections) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Connections) View() string {
 	s := ""
 	title := m.Theme.TitleStyle.Render("Connections")
-	s += title + "\n\n"
+	s += title + "\n"
 	for i, conn := range m.Connections {
-    info := fmt.Sprintf("name: %s database: %s",conn.Name, conn.Database)
+		var icon string
+    icon = SetIcon(conn.Engine)
+    cursor := SetCursor(m.Cursor, i)
+		info := fmt.Sprintf("%s name: %s %s",cursor, conn.Name, icon)
 		if i == m.Cursor {
-			s += m.Theme.SelectedListStyle.Render("  " + info + "\n")
+			s += m.Theme.SelectedListStyle.Render(info + "\n")
 		} else {
-			s += m.Theme.ListStyle.Render("  " + info + "\n")
+			s += m.Theme.ListStyle.Render(info + "\n")
 		}
 		s += "\n"
 	}
 	return s
+}
+
+func ConnectionsMenu() {
+	configs, err := config.GetData[config.Config]()
+	connec, err := config.GetData[[]config.Connection]()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	var theme = theme.NewTheme(configs.Dark)
+	var m = NewConnections(connec, theme)
+	p := tea.NewProgram(m)
+	if _, err := p.Run(); err != nil {
+		fmt.Printf("Error: %v\n", err)
+	}
 }

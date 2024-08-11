@@ -1,13 +1,5 @@
 package database
 
-func Connect() {
-}
-
-func Disconnect() {
-}
-
-
-// DML 
 func Select() {
 }
 

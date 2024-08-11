@@ -1,3 +1,3 @@
 #!/bin/bash
 
-go build -o ./cmd/client/ ../builds/
+go build -o ./main.go
